@@ -3,9 +3,9 @@ entries:
   cassandra:
   - apiVersion: v2
     appVersion: 4.1.4
-    created: "2025-09-22T17:48:54.055347479Z"
+    created: "2025-09-22T18:25:43.888858862Z"
     description: A Helm chart for Apache Cassandra with authentication and PVC storage
-    digest: ef34301d99ed9b0d3bdcc35ed8c1103629c45aeb0fd88c1ff8acdc1cec549d49
+    digest: c89a785ad3e1a2c47683db32c69e1efe6cb74070d17ed19b345e6b91cffacc16
     home: https://cassandra.apache.org/
     keywords:
     - database
@@ -19,6 +19,6 @@ entries:
     - https://github.com/apache/cassandra
     type: application
     urls:
-    - https://github.com/tvon90/helm-repo/releases/download/cassandra-v1.0.0/cassandra-v1.0.0.tgz
+    - https://tvon90.github.io/helm-repo/cassandra-v1.0.0.tgz
     version: v1.0.0
-generated: "2025-09-22T17:48:54.055353581Z"
+generated: "2025-09-22T18:25:43.888388835Z"
