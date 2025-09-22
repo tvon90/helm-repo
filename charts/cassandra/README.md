@@ -36,7 +36,7 @@ helm install my-cassandra db/cassandra --set auth.enabled=false
 # Install with custom password and larger storage
 helm install my-cassandra db/cassandra \
   --set auth.superuser.password=mySecurePassword \
-  --set persistence.size=20Gi \
+  --set persistence.size=10Gi \
   --set persistence.storageClass=fast-ssd
 ```
 
