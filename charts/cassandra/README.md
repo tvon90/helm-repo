@@ -20,7 +20,7 @@ A bare minimum Helm chart for deploying Apache Cassandra with configurable authe
 ### Add Helm Repository
 
 ```bash
-helm repo add my-charts https://tvon90.github.io/helm-repo
+helm repo add db https://tvon90.github.io/helm-repo
 helm repo update
 ```
 
@@ -28,13 +28,13 @@ helm repo update
 
 ```bash
 # Install with default values
-helm install my-cassandra my-charts/cassandra
+helm install my-cassandra db/cassandra
 
 # Install with authentication disabled
-helm install my-cassandra my-charts/cassandra --set auth.enabled=false
+helm install my-cassandra db/cassandra --set auth.enabled=false
 
 # Install with custom password and larger storage
-helm install my-cassandra my-charts/cassandra \
+helm install my-cassandra db/cassandra \
   --set auth.superuser.password=mySecurePassword \
   --set persistence.size=20Gi \
   --set persistence.storageClass=fast-ssd
