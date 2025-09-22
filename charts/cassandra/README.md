@@ -17,6 +17,7 @@ A bare minimum Helm chart for deploying Apache Cassandra with configurable authe
 
 ## Installation
 
+
 ### Add Helm Repository
 
 ```bash
