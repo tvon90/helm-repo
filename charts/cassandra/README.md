@@ -20,7 +20,7 @@ A bare minimum Helm chart for deploying Apache Cassandra with configurable authe
 ### Add Helm Repository
 
 ```bash
-helm repo add my-charts https://tvon90.github.io/my-helm-charts
+helm repo add my-charts https://tvon90.github.io/helm-repo
 helm repo update
 ```
 
