@@ -1,147 +1,28 @@
-name: Build Helm Repo
+name: Release helm chart
 
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'charts/**'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-
     steps:
-      # 1️⃣ Checkout full repo
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      # 2️⃣ Configure Git
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-      # 3️⃣ Install Helm
-      - name: Install Helm
-        uses: azure/setup-helm@v4
-        with:
-          version: '3.13.0'
-
-      # 4️⃣ Install yq for YAML processing
-      - name: Install yq
+      - name: Add dependencies
         run: |
-          sudo wget https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64 -O /usr/bin/yq
-          sudo chmod +x /usr/bin/yq
-
-      # 5️⃣ Determine per-chart versions
-      - name: Determine chart versions
-        id: versions
-        run: |
-          # Initialize versions.yaml if missing
-          if [ ! -f versions.yaml ]; then
-            echo "{}" > versions.yaml
-          fi
-
-          > chart_versions.txt
-          for chart in charts/*; do
-            CHART_NAME=$(basename "$chart")
-            LATEST_TAG=$(yq e ".\"$CHART_NAME\"" versions.yaml || echo "v0.0.0")
-            IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST_TAG#v}"
-
-            # Get commits affecting this chart
-            COMMITS=$(git log --pretty=%s -- $chart)
-            BUMP="patch"
-            if echo "$COMMITS" | grep -q "BREAKING CHANGE"; then
-              BUMP="major"
-            elif echo "$COMMITS" | grep -q "^feat:"; then
-              BUMP="minor"
-            fi
-
-            case $BUMP in
-              major)
-                MAJOR=$((MAJOR+1))
-                MINOR=0
-                PATCH=0
-                ;;
-              minor)
-                MINOR=$((MINOR+1))
-                PATCH=0
-                ;;
-              patch)
-                PATCH=$((PATCH+1))
-                ;;
-            esac
-
-            NEW_TAG="v$MAJOR.$MINOR.$PATCH"
-            echo "Chart $CHART_NAME new version: $NEW_TAG"
-
-            # Save to versions.yaml
-            yq e -i ".\"$CHART_NAME\"=\"$NEW_TAG\"" versions.yaml
-            echo "$CHART_NAME:$NEW_TAG" >> chart_versions.txt
-          done
-
-      # 6️⃣ Package updated charts
-      - name: Package charts
-        run: |
-          mkdir -p charts/packages
-          while read line; do
-            CHART=$(echo $line | cut -d: -f1)
-            VERSION=$(echo $line | cut -d: -f2)
-            helm package charts/$CHART -d charts/packages --version $VERSION
-          done < chart_versions.txt
-
-      # 7️⃣ Update gh-pages branch
-      - name: Update gh-pages
-        run: |
-          # Stash local changes to switch branches safely
-          git stash --include-untracked
-
-          # Fetch and checkout gh-pages
-          git fetch origin gh-pages
-          git checkout gh-pages || git checkout -b gh-pages
-
-          # Pop stashed files if needed
-          git stash pop || true
-
-          # Remove old versions per chart
-          for chart_file in charts/packages/*.tgz; do
-            CHART_NAME=$(basename $chart_file | sed -E 's/-[0-9]+\.[0-9]+\.[0-9]+\.tgz//')
-            rm -f ${CHART_NAME}-*.tgz
-          done
-
-          # Copy new chart packages
-          cp charts/packages/*.tgz .
-
-          # Generate index.yaml
-          helm repo index . --url https://tvon90.github.io/helm-repo
-
-          # Commit and force push
-          git add .
-          git commit -m "Update Helm charts and index.yaml" || echo "No changes"
-          git push origin gh-pages --force
-
-      # 8️⃣ Create GitHub Releases per chart
-      - name: Create GitHub Releases
-        run: |
-          while read line; do
-            CHART=$(echo $line | cut -d: -f1)
-            VERSION=$(echo $line | cut -d: -f2)
-            gh release create $VERSION charts/packages/${CHART}-${VERSION}.tgz --title "${CHART} $VERSION" --notes "Automated release for ${CHART} $VERSION" || echo "Release $VERSION already exists"
-          done < chart_versions.txt
+          helm repo add tvon90 https://tvon90.github.io/helm-repo
+      - name: Run Release
+        uses: helm/chart-releaser-action@v1.5.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 9️⃣ Persist versions.yaml back to main
-      - name: Persist versions.yaml
-        run: |
-          git checkout main
-          git add versions.yaml
-          git commit -m "Update chart versions [ci skip]" || echo "No changes"
-          git push origin main
+          CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
