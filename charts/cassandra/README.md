@@ -13,7 +13,7 @@ A bare minimum Helm chart for deploying Apache Cassandra with configurable authe
 - **StatefulSet Deployment**: Ensures stable network identity and persistent storage
 - **Resource Management**: Configurable CPU and memory limits
 - **Health Checks**: Readiness probes for cluster health monitoring
-- **JVM Configuration**: Customizable heap size and JVM settings
+- **JVM Configuration**: Customizable heap size and JVM settings.
 
 ## Installation
 
