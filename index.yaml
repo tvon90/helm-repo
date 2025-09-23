@@ -3,6 +3,26 @@ entries:
   cassandra:
   - apiVersion: v2
     appVersion: 4.1.4
+    created: "2025-09-23T04:50:53.442101091Z"
+    description: A Helm chart for Apache Cassandra with authentication and PVC storage
+    digest: bedef94136382ec4e68aa85ff2317c9ac4cf6ecd5ce3ae405c8a934f8f472426
+    home: https://cassandra.apache.org/
+    keywords:
+    - database
+    - nosql
+    - cassandra
+    maintainers:
+    - email: tvon90@gmail.com
+      name: Tamilvanan Varatharajan
+    name: cassandra
+    sources:
+    - https://github.com/apache/cassandra
+    type: application
+    urls:
+    - https://github.com/tvon90/helm-repo/releases/download/cassandra-1.0.2/cassandra-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: 4.1.4
     created: "2025-09-23T04:30:46.836678874Z"
     description: A Helm chart for Apache Cassandra with authentication and PVC storage
     digest: 7962a4d94541171bb1d99fde40c1f9d87d02c345eced4721ea2309a4a50d1551
@@ -21,4 +41,4 @@ entries:
     urls:
     - https://github.com/tvon90/helm-repo/releases/download/cassandra-1.0.1/cassandra-1.0.1.tgz
     version: 1.0.1
-generated: "2025-09-23T04:30:46.836697118Z"
+generated: "2025-09-23T04:50:53.442109116Z"
