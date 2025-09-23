@@ -48,8 +48,6 @@ spec:
               value: {{ .Values.jvm.heapSize }}
             - name: HEAP_NEWSIZE
               value: "200M"
-            - name: CASSANDRA_SEEDS
-              value: "{{ include "cassandra.fullname" . }}-0.{{ include "cassandra.fullname" . }}"
             - name: CASSANDRA_CLUSTER_NAME
               value: {{ .Values.cluster.name }}
             - name: CASSANDRA_DC
