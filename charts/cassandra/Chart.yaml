@@ -2,7 +2,7 @@ apiVersion: v2
 name: cassandra
 description: A Helm chart for Apache Cassandra with authentication and PVC storage
 type: application
-version: 1.0.1
+version: 1.0.2
 appVersion: "4.1.4"
 keywords:
   - database
@@ -12,5 +12,5 @@ home: https://cassandra.apache.org/
 sources:
   - https://github.com/apache/cassandra
 maintainers:
-  - name: DevOps Engineer
-    email: devops@example.com
+  - name: Tamilvanan Varatharajan
+    email: tvon90@gmail.com
